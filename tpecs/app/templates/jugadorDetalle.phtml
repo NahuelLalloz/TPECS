@@ -1,0 +1,19 @@
+<table class="table">
+    <tr class="table-primary">
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Posicion</th>
+        <th>KD</th>
+
+    </tr>
+    <?php foreach ($jugadores as $jugador) { ?>
+        <tr>
+            <td class="table-light"><?php echo $jugador->id_jugador ?></td>
+            <td class="table-light"><?php echo $jugador->nombre_jugador ?></td>
+            <td class="table-light"><?php echo $jugador->posicion ?></td>
+            <td class="table-light"><?php echo $jugador->kd ?></td>
+            <th>Equipo</th>
+            <td class="table-light"><?php echo $jugador->fk_equipo ?></td>
+        </tr>
+    <?php } ?>
+</table>
