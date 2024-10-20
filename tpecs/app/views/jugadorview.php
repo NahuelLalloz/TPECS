@@ -2,16 +2,16 @@
 
 class JugadorView
 {
-    public function showJugadores($jugadores)
+    public function showJugadores($jugadores, $equipos)
     {
         $count = count($jugadores);
 
         require 'app/templates/jugador.phtml';
     }
 
-    public function viewJugador($jugadores)
+    public function viewJugador($jugador)
     {
-        $count = count($jugadores);
+
         require 'app/templates/jugadorDetalle.phtml';
     }
     function ShowHomeLocation()

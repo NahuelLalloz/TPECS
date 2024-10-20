@@ -11,7 +11,8 @@ class JugadorModel
     }
     function getJugadores()
     {
-        $query = $this->db->prepare('SELECT * FROM jugadores');
+        $query = $this->db->prepare('SELECT jugadores.*, jugadores.nombre_jugador, jugadores.posicion, jugadores.kd, jugadores.fk_equipo, equipos.nombre_equipo
+         FROM jugadores INNER JOIN equipos ON jugadores.fk_equipo = equipos.id_equipo;');
         $query->execute();
         $jugadores = $query->fetchAll(PDO::FETCH_OBJ);
         return $jugadores;
@@ -19,11 +20,14 @@ class JugadorModel
 
     function getJugadorById($id_jugador)
     {
-
-        $query = $this->db->prepare('SELECT * FROM jugadores WHERE id_jugador = ?');
+        $query = $this->db->prepare('
+            SELECT jugadores.*, equipos.nombre_equipo 
+            FROM jugadores
+            INNER JOIN equipos ON jugadores.fk_equipo = equipos.id_equipo
+            WHERE jugadores.id_jugador = ?
+        ');
         $query->execute([$id_jugador]);
-        $jugadores = $query->fetchAll(PDO::FETCH_OBJ);
-        return $jugadores;
+        return $query->fetch(PDO::FETCH_OBJ);
     }
     function deleteJugador($id_jugador)
     {
@@ -48,15 +52,23 @@ class JugadorModel
         $query->execute([$id_jugador]);
     }
 
-    function getJugadoresByEquipo($nombre_equipo)
+    public function getJugadoresByEquipo($nombre_equipo)
     {
         $query = $this->db->prepare("
-            SELECT jugadores.*, equipos.nombre_equipo AS equipo
-            FROM jugadores
-            INNER JOIN equipos ON jugadores.fk_equipo = equipos.id_equipo
-            WHERE equipos.nombre_equipo = ?
-        ");
+        SELECT jugadores.*, equipos.nombre_equipo 
+        FROM jugadores
+        INNER JOIN equipos ON jugadores.fk_equipo = equipos.id_equipo
+        WHERE equipos.nombre_equipo = ?
+    ");
         $query->execute([$nombre_equipo]);
         return $query->fetchAll(PDO::FETCH_OBJ);
+    }
+    public function existsJugador($nombre_jugador)
+    {
+        $query = $this->db->prepare('SELECT COUNT(*) FROM jugadores WHERE nombre_jugador = ?');
+        $query->execute([$nombre_jugador]);
+
+
+        return $query->fetchColumn() > 0;
     }
 }

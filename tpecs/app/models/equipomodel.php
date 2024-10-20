@@ -41,11 +41,21 @@ class EquipoModel extends Model
 
         return $query->fetch(PDO::FETCH_OBJ);
     }
-    public function insertEquipo($nombre_equipo, $ranking, $region)
+    public function getJugadorById($idJugador)
     {
-        $query = $this->db->prepare("INSERT INTO equipos (nombre_equipo, ranking, region) VALUES (?, ?, ?)");
-
-        $query->execute([$nombre_equipo, $ranking, $region]);
+        $query = $this->db->prepare('
+        SELECT jugadores.*, equipos.nombre_equipo
+        FROM jugadores
+        INNER JOIN equipos ON jugadores.fk_equipo = equipos.id_equipo
+        WHERE jugadores.id_jugador = ?
+    ');
+        $query->execute([$idJugador]);
+        return $query->fetch(PDO::FETCH_OBJ);
+    }
+    public function insertEquipo($nombre_equipo, $ranking, $region, $imagenURL)
+    {
+        $query = $this->db->prepare("INSERT INTO equipos (nombre_equipo, ranking, region, imagen_url) VALUES (?, ?, ?, ?)");
+        $query->execute([$nombre_equipo, $ranking, $region, $imagenURL]);
 
         return $this->db->lastInsertId();
     }

@@ -55,8 +55,16 @@
                 <input type="text" placeholder="Ingrese el posicion" name="posicion" class="form-control mb-3" required>
                 <label for="kd" class="form-label">kd:</label>
                 <input type="number" placeholder="Ingrese el kd" name="kd" class="form-control mb-3" required>
-                <label for="fk_equipo" class="form-label">Id del equipo</label>
-                <input type="text" placeholder="Ingrese el equipo" name="fk_equipo" class="form-control mb-3" required>
+                <div class="form-group">
+                    <label>Equipo</label>
+                    <select required name="fk_equipo" class="form-control">
+                        <option value="">Seleccione un equipo</option>
+                        <?php foreach ($equipos as $equipo): ?>
+                            <option value="<?= $equipo->id_equipo ?>"><?= $equipo->nombre_equipo ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
 
 
             </div>

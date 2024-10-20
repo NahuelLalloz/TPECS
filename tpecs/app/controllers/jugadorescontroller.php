@@ -17,17 +17,25 @@ class JugadorController
         $this->view = new JugadorView();
     }
 
+
     public function showJugador()
     {
         $jugadores = $this->model->getJugadores();
-        $this->view->showJugadores($jugadores);
+        $equipos = $this->modelc->getEquipos();
+        $this->view->showJugadores($jugadores, $equipos);
     }
 
     public function showJugadorDetalle($id_jugador)
     {
-        $jugadores = $this->model->getJugadorById($id_jugador);
-        $this->view->viewJugador($jugadores);
+        $jugador = $this->model->getJugadorById($id_jugador);
+
+        if ($jugador) {
+            $this->view->viewJugador($jugador);
+        } else {
+            $this->view->showError('Jugador no encontrado');
+        }
     }
+
     public function deleteJugador($id_jugador)
     {
         $this->model->deleteJugador($id_jugador);
@@ -43,6 +51,10 @@ class JugadorController
         try {
             if (empty($nombre_jugador) ||  empty($posicion) ||  empty($kd) || empty($fk_equipo)) {
                 return $this->view->showError('debe completar todos los datos');
+            }
+            if ($this->model->existsJugador($nombre_jugador)) {
+                $this->view->showError("El nombre del jugador ya esta en uso.");
+                return;
             }
             $result = $this->model->insertJugador($nombre_jugador, $posicion, $kd, $fk_equipo);
             if (!$result) {
